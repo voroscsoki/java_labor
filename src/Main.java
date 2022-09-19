@@ -16,6 +16,8 @@ public class Main {
                     case "pwd" -> pwd(cmd);
                     case "ls" -> ls(cmd);
                     case "cd" -> cd(cmd);
+                    case "rm" -> rm(cmd);
+                    case "mkdir" -> mkdir(cmd);
                 }
             }
             catch (Exception e){
@@ -77,6 +79,22 @@ public class Main {
         Optional<File> targetFolder = Arrays.stream(files)
             .filter(f -> f.isDirectory() && f.getName().equals(target))
             .findFirst();
-        if(targetFolder.isPresent()) wd = targetFolder.get();
+        targetFolder.ifPresent(file -> wd = file);
+    }
+
+    protected static void rm(String[] cmd) throws IOException {
+        String targetName = cmd[1];
+        if(targetName == null) throw new IllegalArgumentException("Nem lett célpont megadva!");
+        File[] files = wd.listFiles();
+        if(files == null) throw new FileNotFoundException("Nincsenek fájlok!");
+        var target = Arrays.stream(files).filter(f -> f.getName().equals(cmd[1])).findFirst();
+        if(target.isEmpty()) throw new FileNotFoundException("Ez a fájl nem létezik!");
+        if(!target.get().delete()) throw new IOException("A törlés nem sikerült!");
+    }
+    protected static void mkdir(String[] cmd) throws IOException {
+        String targetName = cmd[1];
+        if(targetName == null) throw new IllegalArgumentException("Nem lett célpont megadva!");
+        File target = new File(wd.getCanonicalPath() + File.pathSeparatorChar + targetName);
+        if(!target.mkdir()) throw new IOException("Sikertelen mappakészítés!");
     }
 }
