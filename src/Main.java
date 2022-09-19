@@ -12,13 +12,17 @@ public class Main {
             else if (cmd[0].equals("hello")) {
                 hello(cmd);
             }
+            else if (cmd[0].equals("pwd")) {
+                pwd(cmd);
+            }
         }
     }
 
     protected static void exit(String[] cmd){
         System.exit(0);
     }
-    protected static void hello(String[] cmd){
-        System.out.println("Hello world!");
+    protected static void hello(String[] cmd){ System.out.println("Hello world!"); }
+    protected static void pwd(String[] cmd){
+        System.out.println("Jelenlegi mappa: " + System.getProperty("user.dir"));
     }
 }
