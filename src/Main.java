@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -18,6 +16,14 @@ public class Main {
                     case "cd" -> cd(cmd);
                     case "rm" -> rm(cmd);
                     case "mkdir" -> mkdir(cmd);
+                    case "cp" -> cp(cmd);
+                    case "head" -> head(cmd);
+                    case "mv" -> mv(cmd);
+                    case "cat" -> cat(cmd);
+                    case "length" -> length(cmd);
+                    case "tail" -> tail(cmd);
+                    case "wc" -> wc(cmd);
+                    case "grep" -> grep(cmd);
                 }
             }
             catch (Exception e){
@@ -94,7 +100,106 @@ public class Main {
     protected static void mkdir(String[] cmd) throws IOException {
         String targetName = cmd[1];
         if(targetName == null) throw new IllegalArgumentException("Nem lett célpont megadva!");
-        File target = new File(wd.getCanonicalPath() + File.pathSeparatorChar + targetName);
+        File target = new File(wd.getCanonicalPath() + '/' + targetName);
         if(!target.mkdir()) throw new IOException("Sikertelen mappakészítés!");
+    }
+
+    protected static void cp(String[] cmd) throws IOException {
+        File f1 = new File(wd.getCanonicalPath() + '/' + cmd[1]);
+        File f2 = new File(wd.getCanonicalPath() + '/' + cmd[2]);
+        if(!f1.exists() || !f1.isFile()) throw new IllegalArgumentException("A forrásfájl nem létezik!");
+        try(FileInputStream from = new FileInputStream(f1);
+            FileOutputStream to = new FileOutputStream(f2)){
+            to.write(from.readAllBytes());
+        }
+
+
+    }
+    protected static void head(String[] cmd) throws IOException {
+        int number = 10;
+        if(cmd.length < 2) throw new IOException("Nincs elég argumentum");
+        if(Objects.equals(cmd[1], "-n")){
+            if(cmd.length < 4) throw new IOException("Nincs elég argumentum");
+            number = Integer.parseInt(cmd[2]);
+        }
+        try(BufferedReader bfr = new BufferedReader(new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1]))){
+            for (int i = 0; i < number; i++){
+                String local = bfr.readLine();
+                if(local != null) System.out.println(local);
+            }
+        }
+    }
+    protected static void mv(String[] cmd) throws IOException {
+        File f1 = new File(wd.getCanonicalPath() + '/' + cmd[1]);
+        File f2 = new File(wd.getCanonicalPath() + '/' + cmd[2]);
+        if(!f1.exists() || !f1.isFile()) throw new IllegalArgumentException("A forrásfájl nem létezik!");
+        try(FileInputStream from = new FileInputStream(f1);
+            FileOutputStream to = new FileOutputStream(f2)){
+            to.write(from.readAllBytes());
+        }
+        if(!f1.delete()) throw new IOException("Mozgatásnál törlés hiba!");
+    }
+    protected static void cat(String[] cmd) throws IOException {
+        if(cmd.length < 2) throw new IOException("Nincs elég argumentum");
+        try(BufferedReader bfr = new BufferedReader(new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1]))){
+            while(true){
+                String local = bfr.readLine();
+                if(local != null) System.out.println(local);
+                else break;
+            }
+        }
+    }
+    protected static void length(String[] cmd) throws IOException{
+        if(cmd.length < 2) throw new IOException("Nincs elég argumentum");
+        try(FileReader fr = new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1])){
+            int count = 0;
+            while(fr.read() != -1) count++;
+            System.out.println(count + " karakter");
+        }
+    }
+    protected static void tail(String[] cmd) throws IOException {
+        int number = 10;
+        if(cmd.length < 2) throw new IOException("Nincs elég argumentum");
+        if(Objects.equals(cmd[1], "-n")){
+            if(cmd.length < 4) throw new IOException("Nincs elég argumentum");
+            number = Integer.parseInt(cmd[2]);
+        }
+        try(BufferedReader bfr = new BufferedReader(new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1]))){
+            LinkedList lines = new LinkedList<String>();
+            while(true){
+                String local = bfr.readLine();
+                if(local == null) break;
+                lines.add(local);
+            }
+            if(number >= lines.size()) number = lines.size();
+            for (int i = lines.size()-number; i < lines.size(); i++)
+                System.out.println(lines.get(i));
+        }
+    }
+    protected static void wc(String[] cmd) throws IOException {
+        if(cmd.length < 2) throw new IOException("Nincs elég argumentum");
+        try(BufferedReader bfr = new BufferedReader(new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1]))){
+            int linecount = 0, wordcount = 0, lettercount = 0;
+            while(true){
+                String local = bfr.readLine();
+                if(local != null){
+                    linecount++;
+                    wordcount += local.split(" ").length;
+                    lettercount += local.length();
+                }
+                else break;
+            }
+            System.out.println("Sorok száma: " + linecount + ", szavak száma: " + wordcount + ", betűk száma: " + lettercount);
+        }
+    }
+    protected static void grep(String[] cmd) throws IOException { //nem működik
+        if(cmd.length < 3) throw new IOException("Nincs elég argumentum");
+        try(BufferedReader bfr = new BufferedReader(new FileReader(wd.getCanonicalPath() + '/' + cmd[cmd.length-1]))){
+            while(true){
+                String local = bfr.readLine();
+                if(local == null) break;
+                if(local.matches(cmd[1])) System.out.println(local);
+            }
+        }
     }
 }
