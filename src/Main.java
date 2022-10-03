@@ -94,21 +94,21 @@ public class Main {
         out.writeObject(beers);
     }
 
-    protected static void search(String[] cmd) {
+    protected static void search(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
         for (Beer b : beers) {
             if(b.getName().equals(cmd[1]))
                 System.out.println(b);
         }
     }
-    protected static void find(String[] cmd) {
+    protected static void find(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
         for (Beer b : beers) {
             if(b.getName().contains(cmd[1]))
                 System.out.println(b);
         }
     }
-    protected static void delete(String[] cmd) {
+    protected static void delete(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
         var iter = beers.iterator();
         while(iter.hasNext()){
