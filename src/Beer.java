@@ -1,4 +1,5 @@
-public class Beer {
+import java.io.Serializable;
+public class Beer implements Serializable {
     private String name;
     private String style;
     private double strength;
