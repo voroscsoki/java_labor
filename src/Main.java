@@ -4,7 +4,6 @@ import Comparators.StyleComparator;
 import Data.Beer;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -42,6 +41,9 @@ public class Main {
                 else if ("find".equals(cmd[0])) {
                     find(cmd);
                 }
+                else if ("delete".equals(cmd[0])) {
+                    delete(cmd);
+                }
 
             }
             catch(Exception e){
@@ -55,24 +57,21 @@ public class Main {
         beers.add(new Beer(cmd[1], cmd[2], Double.parseDouble(cmd[3])));
     }
     protected static void list(String[] cmd) {
-        ArrayList<Beer> local = (ArrayList<Beer>) beers.clone();
+        ArrayList<Beer> local = (ArrayList<Beer>) beers.clone(); //unchecked cast shouldn't cause issues
         Comparator<Beer> comp;
         if(cmd.length > 1 && cmd[1] != null)
-            switch (cmd[1]){
-                case "name":{
+            switch (cmd[1]) {
+                case "name" -> {
                     comp = new NameComparator();
                     local.sort(comp);
-                    break;
                 }
-                case "style": {
+                case "style" -> {
                     comp = new StyleComparator();
                     local.sort(comp);
-                    break;
                 }
-                case "strength": {
+                case "strength" -> {
                     comp = new StrengthComparator();
                     local.sort(comp);
-                    break;
                 }
             }
         else local = beers;
@@ -85,7 +84,7 @@ public class Main {
         File inFile = new File(cmd[1]);
         if (!inFile.exists()) throw new IOException("Nincs ilyen fájl!");
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(inFile));
-        beers = (ArrayList<Beer>) in.readObject();
+        beers = (ArrayList<Beer>) in.readObject(); //unchecked cast shouldn't cause issues
     }
     protected static void save(String[] cmd) throws IOException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
@@ -107,6 +106,14 @@ public class Main {
         for (Beer b : beers) {
             if(b.getName().contains(cmd[1]))
                 System.out.println(b);
+        }
+    }
+    protected static void delete(String[] cmd) {
+        if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
+        var iter = beers.iterator();
+        while(iter.hasNext()){
+            Beer current = iter.next();
+            if(current.getName().equals(cmd[1])) iter.remove();
         }
     }
 }

@@ -2,9 +2,9 @@ package Data;
 
 import java.io.Serializable;
 public class Beer implements Serializable {
-    private String name;
-    private String style;
-    private double strength;
+    private final String name;
+    private final String style;
+    private final double strength;
 
     @Override
     public String toString() {
