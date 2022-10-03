@@ -1,12 +1,19 @@
+import Comparators.NameComparator;
+import Comparators.StrengthComparator;
+import Comparators.StyleComparator;
+import Data.Beer;
+
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
     private static ArrayList<Beer> beers = new ArrayList<>();
     public static void main(String[] args) {
         String line;
-        beers.add(new Beer("Guiness", "stout", 4.2));
+        beers.add(new Beer("Guinness", "stout", 4.2));
         beers.add(new Beer("Kőbányai", "ale", 4.3));
 
         Scanner r = new Scanner(System.in);
@@ -42,7 +49,28 @@ public class Main {
         beers.add(new Beer(cmd[1], cmd[2], Double.parseDouble(cmd[3])));
     }
     protected static void list(String[] cmd) {
-        for (Beer b : beers) {
+        ArrayList<Beer> local = (ArrayList<Beer>) beers.clone();
+        Comparator<Beer> comp;
+        if(cmd.length > 1 && cmd[1] != null)
+            switch (cmd[1]){
+                case "name":{
+                    comp = new NameComparator();
+                    local.sort(comp);
+                    break;
+                }
+                case "style": {
+                    comp = new StyleComparator();
+                    local.sort(comp);
+                    break;
+                }
+                case "strength": {
+                    comp = new StrengthComparator();
+                    local.sort(comp);
+                    break;
+                }
+            }
+        else local = beers;
+        for (Beer b : local) {
             System.out.println(b);
         }
     }
