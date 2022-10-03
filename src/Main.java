@@ -85,6 +85,7 @@ public class Main {
         if (!inFile.exists()) throw new IOException("Nincs ilyen fájl!");
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(inFile));
         beers = (ArrayList<Beer>) in.readObject(); //unchecked cast shouldn't cause issues
+        in.close();
     }
     protected static void save(String[] cmd) throws IOException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
@@ -92,6 +93,7 @@ public class Main {
         if(!outFile.createNewFile()) throw new IOException("Fájlkészítés hiba!");
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(outFile));
         out.writeObject(beers);
+        out.close();
     }
 
     protected static void search(String[] cmd) throws IllegalArgumentException {
