@@ -36,6 +36,12 @@ public class Main {
                 else if ("save".equals(cmd[0])) {
                     save(cmd);
                 }
+                else if ("search".equals(cmd[0])) {
+                    search(cmd);
+                }
+                else if ("find".equals(cmd[0])) {
+                    find(cmd);
+                }
 
             }
             catch(Exception e){
@@ -87,5 +93,20 @@ public class Main {
         if(!outFile.createNewFile()) throw new IOException("Fájlkészítés hiba!");
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(outFile));
         out.writeObject(beers);
+    }
+
+    protected static void search(String[] cmd) {
+        if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
+        for (Beer b : beers) {
+            if(b.getName().equals(cmd[1]))
+                System.out.println(b);
+        }
+    }
+    protected static void find(String[] cmd) {
+        if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
+        for (Beer b : beers) {
+            if(b.getName().contains(cmd[1]))
+                System.out.println(b);
+        }
     }
 }
