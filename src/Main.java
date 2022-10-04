@@ -97,18 +97,64 @@ public class Main {
     }
 
     protected static void search(String[] cmd) throws IllegalArgumentException {
-        if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
-        for (Beer b : beers) {
-            if(b.getName().equals(cmd[1]))
-                System.out.println(b);
+        if(cmd.length >= 3){
+            if ("name".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getName().equals(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            } else if ("style".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getStyle().equals(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            } else if ("strength".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getStrength() == Double.parseDouble(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            }
         }
+        else if (cmd.length == 2){
+            for (Beer b : beers) {
+                if(b.getName().equals(cmd[1]))
+                    System.out.println(b);
+            }
+        }
+        else throw new IllegalArgumentException("Túl kevés paraméter!");
     }
     protected static void find(String[] cmd) throws IllegalArgumentException {
-        if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
-        for (Beer b : beers) {
-            if(b.getName().contains(cmd[1]))
-                System.out.println(b);
+        if(cmd.length >= 3){
+            if ("name".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getName().contains(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            } else if ("style".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getStyle().contains(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            } else if ("strength".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getStrength() >= Double.parseDouble(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            }
+            else if ("weaker".equals(cmd[1])) {
+                for (Beer b : beers) {
+                    if (b.getStrength() <= Double.parseDouble(cmd[cmd.length - 1]))
+                        System.out.println(b);
+                }
+            }
         }
+        else if (cmd.length == 2){
+            for (Beer b : beers) {
+                if(b.getName().equals(cmd[1]))
+                    System.out.println(b);
+            }
+        }
+        else throw new IllegalArgumentException("Túl kevés paraméter!");
     }
     protected static void delete(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
