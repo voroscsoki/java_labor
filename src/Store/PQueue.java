@@ -1,9 +1,12 @@
 package Store;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.function.Consumer;
+
 import static java.util.Collections.max;
 
-public class PQueue<T extends Comparable<T>> {
+public class PQueue<T extends Comparable<T>> implements Iterable {
     ArrayList<T> data;
 
     public PQueue() {
@@ -25,4 +28,14 @@ public class PQueue<T extends Comparable<T>> {
     }
     int size() { return data.size(); }
     void clear() { data.clear(); }
+
+    @Override
+    public Iterator<T> iterator() {
+        return data.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer action) {
+        data.forEach(action);
+    }
 }

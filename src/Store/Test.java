@@ -14,5 +14,11 @@ public class Test {
         catch (EmptyQueueException ignored) {}
         pq.clear();
         System.out.println(pq.size());
+
+        PQueue<Integer> s = new PQueue<Integer>();
+        s.push(1); s.push(2); s.push(3); s.push(4);
+        for (Object i : s) { //we know it's an integer
+            System.out.println(i);
+        }
     }
 }
