@@ -1,10 +1,12 @@
 public class Producer extends Thread {
     private final String text;
+    private final int delay;
     private final Fifo fifo;
     private int counter = 0;
 
-    public Producer(String text, Fifo f) {
+    public Producer(String text, int d, Fifo f) {
         this.text = text;
+        this.delay = d;
         this.fifo = f;
     }
 
@@ -16,7 +18,7 @@ public class Producer extends Thread {
                 System.out.println("produced " + text + " " + (counter++) + " " + System.currentTimeMillis() % 100000);
 
                 //noinspection BusyWait
-                Thread.sleep(1000);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 System.out.println("failed: " + text);
             }

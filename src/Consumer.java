@@ -1,25 +1,25 @@
 public class Consumer extends Thread {
-    private final String s;
-    private final int n;
-    private final Fifo f;
+    private final String name;
+    private final int delay;
+    private final Fifo fifo;
 
     public Consumer(String s, int n, Fifo f) {
-        this.s = s;
-        this.n = n;
-        this.f = f;
+        this.name = s;
+        this.delay = n;
+        this.fifo = f;
     }
 
     public void run() {
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                String read = f.get();
-                System.out.println("consumed " + s + " " + read + " " + System.currentTimeMillis() % 100000);
+                String read = fifo.get();
+                System.out.println("consumed " + name + " " + read + " " + System.currentTimeMillis() % 100000);
 
                 //noinspection BusyWait
-                Thread.sleep(n);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
-                System.out.println("failed: " + s);
+                System.out.println("failed: " + name);
             }
         }
     }
