@@ -1,7 +1,8 @@
 public class Application {
     public static void main(String[] args){
-        Producer p1 = new Producer("elso");
-        Producer p2 = new Producer("masodik");
+        Fifo teszt = new Fifo();
+        Producer p1 = new Producer("elso", teszt);
+        Producer p2 = new Producer("masodik", teszt);
         try {
             p1.start();
             Thread.sleep(500);
