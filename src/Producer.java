@@ -1,4 +1,4 @@
-public class Producer extends Thread {
+public class Producer implements Runnable {
     private final String text;
     private final int delay;
     private final Fifo fifo;
