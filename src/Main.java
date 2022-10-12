@@ -1,6 +1,3 @@
-import Comparators.NameComparator;
-import Comparators.StrengthComparator;
-import Comparators.StyleComparator;
 import Data.Beer;
 
 import java.io.*;
@@ -58,21 +55,11 @@ public class Main {
     }
     protected static void list(String[] cmd) {
         ArrayList<Beer> local = (ArrayList<Beer>) beers.clone(); //unchecked cast shouldn't cause issues
-        Comparator<Beer> comp;
         if(cmd.length > 1 && cmd[1] != null)
             switch (cmd[1]) {
-                case "name" -> {
-                    comp = new NameComparator();
-                    local.sort(comp);
-                }
-                case "style" -> {
-                    comp = new StyleComparator();
-                    local.sort(comp);
-                }
-                case "strength" -> {
-                    comp = new StrengthComparator();
-                    local.sort(comp);
-                }
+                case "name" -> local.sort((b1, b2) -> b1.getName().compareTo(b2.getName())); //alternatives: Collections.sort(), Comparator.comparing
+                case "style" -> local.sort((b1, b2) -> b1.getStyle().compareTo(b2.getStyle()));
+                case "strength" -> local.sort((b1, b2) -> Double.compare(b1.getStrength(), b2.getStrength()));
             }
         else local = beers;
         for (Beer b : local) {
