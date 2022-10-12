@@ -2,7 +2,7 @@ import Data.Beer;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -11,6 +11,15 @@ public class Main {
         String line;
         beers.add(new Beer("Guinness", "stout", 4.2));
         beers.add(new Beer("Kőbányai", "ale", 4.3));
+        HashMap<String, Command> commands = new HashMap<>();
+        commands.put("add", Main::add);
+        commands.put("list", Main::list);
+        commands.put("load", Main::load);
+        commands.put("save", Main::save);
+        commands.put("search", Main::search);
+        commands.put("find", Main::find);
+        commands.put("delete", Main::delete);
+
 
         Scanner r = new Scanner(System.in);
         while(true){
@@ -20,28 +29,9 @@ public class Main {
                 if ("exit".equals(cmd[0])) {
                     return;
                 }
-                else if ("add".equals(cmd[0])) {
-                    add(cmd);
-                }
-                else if ("list".equals(cmd[0])) {
-                    list(cmd);
-                }
-                else if ("load".equals(cmd[0])) {
-                    load(cmd);
-                }
-                else if ("save".equals(cmd[0])) {
-                    save(cmd);
-                }
-                else if ("search".equals(cmd[0])) {
-                    search(cmd);
-                }
-                else if ("find".equals(cmd[0])) {
-                    find(cmd);
-                }
-                else if ("delete".equals(cmd[0])) {
-                    delete(cmd);
-                }
-
+                Command attempt = commands.get(cmd[0]);
+                if(attempt == null) throw new IllegalArgumentException("Ilyen parancs nem létezik.");
+                attempt.execute(cmd);
             }
             catch(Exception e){
                 System.out.println("Hiba! " + e.getMessage());
