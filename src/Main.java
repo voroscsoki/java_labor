@@ -1,26 +1,18 @@
 import Data.Beer;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static ArrayList<Beer> beers = new ArrayList<>();
+    private static final HashMap<String, Comparator<Beer>> comps = new HashMap<>();
+    private static final HashMap<String, Command> commands = new HashMap<>();
+    private static List<String> lparams;
     public static void main(String[] args) {
+        init();
+
+
         String line;
-        beers.add(new Beer("Guinness", "stout", 4.2));
-        beers.add(new Beer("Kőbányai", "ale", 4.3));
-        HashMap<String, Command> commands = new HashMap<>();
-        commands.put("add", Main::add);
-        commands.put("list", Main::list);
-        commands.put("load", Main::load);
-        commands.put("save", Main::save);
-        commands.put("search", Main::search);
-        commands.put("find", Main::find);
-        commands.put("delete", Main::delete);
-
-
         Scanner r = new Scanner(System.in);
         while(true){
             line = r.nextLine();
@@ -39,19 +31,43 @@ public class Main {
         }
     }
 
+    private static void init(){
+        beers.add(new Beer("Guinness", "stout", 4.2));
+        beers.add(new Beer("Kőbányai", "ale", 4.3));
+
+        commands.put("add", Main::add);
+        commands.put("list", Main::list);
+        commands.put("load", Main::load);
+        commands.put("save", Main::save);
+        commands.put("search", Main::search);
+        commands.put("find", Main::find);
+        commands.put("delete", Main::delete);
+
+        comps.put("name", Comparator.comparing(Beer::getName));
+        comps.put("style", Comparator.comparing(Beer::getStyle));
+        comps.put("strength", Comparator.comparing(Beer::getStrength));
+
+        lparams = new LinkedList<>();
+        lparams.addAll(comps.keySet());
+    }
+
     protected static void add(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 4) throw new IllegalArgumentException("Túl kevés paraméter!");
         beers.add(new Beer(cmd[1], cmd[2], Double.parseDouble(cmd[3])));
     }
     protected static void list(String[] cmd) {
         ArrayList<Beer> local = (ArrayList<Beer>) beers.clone(); //unchecked cast shouldn't cause issues
-        if(cmd.length > 1 && cmd[1] != null)
-            switch (cmd[1]) {
-                case "name" -> local.sort((b1, b2) -> b1.getName().compareTo(b2.getName())); //alternatives: Collections.sort(), Comparator.comparing
-                case "style" -> local.sort((b1, b2) -> b1.getStyle().compareTo(b2.getStyle()));
-                case "strength" -> local.sort((b1, b2) -> Double.compare(b1.getStrength(), b2.getStrength()));
-            }
-        else local = beers;
+        if(cmd.length > 1 && cmd[1] != null && comps.containsKey(cmd[1])) {
+            lparams.remove(cmd[1]);
+            lparams.add(0, cmd[1]);
+        }
+
+        Comparator<Beer> comp = comps.get(lparams.get(0));
+        for(int i = 1; i < lparams.size(); i++){
+            comp.thenComparing(comps.get(lparams.get(i)));
+        }
+
+        local.sort(comp);
         for (Beer b : local) {
             System.out.println(b);
         }
@@ -135,10 +151,6 @@ public class Main {
     }
     protected static void delete(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 2) throw new IllegalArgumentException("Túl kevés paraméter!");
-        var iter = beers.iterator();
-        while(iter.hasNext()){
-            Beer current = iter.next();
-            if(current.getName().equals(cmd[1])) iter.remove();
-        }
+        beers.removeIf(current -> current.getName().equals(cmd[1])); //just for fun
     }
 }
