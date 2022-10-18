@@ -7,10 +7,29 @@ public class Main {
     private static ArrayList<Beer> beers = new ArrayList<>();
     private static final HashMap<String, Comparator<Beer>> comps = new HashMap<>();
     private static final HashMap<String, Command> commands = new HashMap<>();
-    private static List<String> lparams;
-    public static void main(String[] args) {
-        init();
+    private static final List<String> lparams;
 
+    static {
+        beers.add(new Beer("Guinness", "stout", 4.2));
+        beers.add(new Beer("Kőbányai", "ale", 4.3));
+
+        commands.put("add", Main::add);
+        commands.put("list", Main::list);
+        commands.put("load", Main::load);
+        commands.put("save", Main::save);
+        commands.put("search", Main::search);
+        commands.put("find", Main::find);
+        commands.put("delete", Main::delete);
+
+        comps.put("name", Comparator.comparing(Beer::getName));
+        comps.put("style", Comparator.comparing(Beer::getStyle));
+        comps.put("strength", Comparator.comparing(Beer::getStrength));
+
+        lparams = new LinkedList<>();
+        lparams.addAll(comps.keySet());
+    }
+
+    public static void main(String[] args) {
 
         String line;
         Scanner r = new Scanner(System.in);
@@ -31,25 +50,6 @@ public class Main {
         }
     }
 
-    private static void init(){
-        beers.add(new Beer("Guinness", "stout", 4.2));
-        beers.add(new Beer("Kőbányai", "ale", 4.3));
-
-        commands.put("add", Main::add);
-        commands.put("list", Main::list);
-        commands.put("load", Main::load);
-        commands.put("save", Main::save);
-        commands.put("search", Main::search);
-        commands.put("find", Main::find);
-        commands.put("delete", Main::delete);
-
-        comps.put("name", Comparator.comparing(Beer::getName));
-        comps.put("style", Comparator.comparing(Beer::getStyle));
-        comps.put("strength", Comparator.comparing(Beer::getStrength));
-
-        lparams = new LinkedList<>();
-        lparams.addAll(comps.keySet());
-    }
 
     protected static void add(String[] cmd) throws IllegalArgumentException {
         if(cmd.length < 4) throw new IllegalArgumentException("Túl kevés paraméter!");
