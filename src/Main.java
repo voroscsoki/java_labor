@@ -4,7 +4,6 @@ public class Main{
         System.out.println(caesarCode(asd, -25));
 
         CaesarFrame cf = new CaesarFrame();
-        cf.setVisible(true);
     }
 
     private static String caesarCode(String input, int offset){
