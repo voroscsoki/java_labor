@@ -2,6 +2,9 @@ public class Main{
     public static void main(String[] args) {
         String asd = "abCdEf";
         System.out.println(caesarCode(asd, -25));
+
+        CaesarFrame cf = new CaesarFrame();
+        cf.setVisible(true);
     }
 
     private static String caesarCode(String input, int offset){
