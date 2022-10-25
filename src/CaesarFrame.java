@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +20,7 @@ public class CaesarFrame extends JFrame {
         selector = new JComboBox<>(chars);
 
         confirmButton.addActionListener(new OkButtonActionListener());
-        upperTf.addKeyListener(new InputFieldKeyListener());
+        upperTf.getDocument().addDocumentListener(new InputFieldKeyListener());
         upperJp.add(selector);
         upperJp.add(upperTf);
         upperJp.add(confirmButton);
@@ -40,12 +42,15 @@ public class CaesarFrame extends JFrame {
     private static String caesarCode(String input, int offset){
         StringBuilder sb = new StringBuilder(input.toUpperCase());
         for (int i = 0; i < sb.length(); i++){
-            char tmp = (char) (sb.charAt(i) + offset);
-            while(tmp < 'A')
-                tmp += 26;
-            while(tmp > 'Z')
-                tmp -= 26;
-            sb.setCharAt(i, tmp);
+            char current = sb.charAt(i);
+            if(current != ' ') {
+                current = (char) (sb.charAt(i) + offset);
+                while (current < 'A')
+                    current += 26;
+                while (current > 'Z')
+                    current -= 26;
+            }
+            sb.setCharAt(i, current);
         }
         return sb.toString();
     }
@@ -57,10 +62,20 @@ public class CaesarFrame extends JFrame {
             lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
         }
     }
-    class InputFieldKeyListener extends KeyAdapter{
+    class InputFieldKeyListener implements DocumentListener {
         @Override
-        public void keyTyped(KeyEvent e) {
+        public void insertUpdate(DocumentEvent e) {
             lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A'));
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            this.insertUpdate(e);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            this.insertUpdate(e);
         }
     }
 }
