@@ -41,15 +41,16 @@ public class CaesarFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
-    private static String caesarDeCode(String input, int offset){
-        return caesarCode(input, -offset);
+    private static String caesarDeCode(String input, char offset){
+        return caesarCode(input, (char) ('A' - (offset - 'A')));
     }
-    private static String caesarCode(String input, int offset){
+    private static String caesarCode(String input, char offset){
+        int offsetNumber = offset - 'A';
         StringBuilder sb = new StringBuilder(input.toUpperCase());
         for (int i = 0; i < sb.length(); i++){
             char current = sb.charAt(i);
             if(current != ' ') {
-                current = (char) (sb.charAt(i) + offset);
+                current = (char) (sb.charAt(i) + offsetNumber);
                 while (current < 'A')
                     current += 26;
                 while (current > 'Z')
@@ -81,11 +82,11 @@ public class CaesarFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(encoding){
-                lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+                lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem())); //casting here is fine
 
             }
             else{
-                upperTf.setText(caesarDeCode(lowerTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+                upperTf.setText(caesarDeCode(lowerTf.getText(), (char) selector.getSelectedItem()));
 
             }
         }
@@ -93,7 +94,7 @@ public class CaesarFrame extends JFrame {
     class InputFieldKeyListener implements DocumentListener {
         @Override
         public void insertUpdate(DocumentEvent e) {
-            lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A'));
+            lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem()));
         }
 
         @Override
