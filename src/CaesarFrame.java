@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CaesarFrame extends JFrame {
     private final JTextField upperTf = new JTextField(20);
@@ -16,6 +18,7 @@ public class CaesarFrame extends JFrame {
         selector = new JComboBox<>(chars);
 
         confirmButton.addActionListener(new OkButtonActionListener());
+        upperTf.addKeyListener(new InputFieldKeyListener());
         upperJp.add(selector);
         upperJp.add(upperTf);
         upperJp.add(confirmButton);
@@ -52,6 +55,12 @@ public class CaesarFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+        }
+    }
+    class InputFieldKeyListener extends KeyAdapter{
+        @Override
+        public void keyTyped(KeyEvent e) {
+            lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A'));
         }
     }
 }
