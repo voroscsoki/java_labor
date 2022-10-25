@@ -1,11 +1,10 @@
+import org.w3c.dom.Text;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class CaesarFrame extends JFrame {
     private final JTextField upperTf = new JTextField(20);
@@ -14,19 +13,21 @@ public class CaesarFrame extends JFrame {
     private final JPanel lowerJp = new JPanel();
     private final JButton confirmButton = new JButton("Code!");
     private final JComboBox<Object> selector;
+    private boolean encoding = true;
 
     public CaesarFrame(){
         Object[] chars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         selector = new JComboBox<>(chars);
 
-        confirmButton.addActionListener(new OkButtonActionListener());
         upperTf.getDocument().addDocumentListener(new InputFieldKeyListener());
+        upperTf.addFocusListener(new TextFocusListener(true));
+        lowerTf.addFocusListener(new TextFocusListener(false));
+        confirmButton.addActionListener(new OkButtonActionListener());
         upperJp.add(selector);
         upperJp.add(upperTf);
         upperJp.add(confirmButton);
 
         lowerJp.add(new JLabel("Output: "));
-        lowerTf.setFocusable(false);
         lowerJp.add(lowerTf);
 
         this.setTitle("SwingLab");
@@ -38,6 +39,9 @@ public class CaesarFrame extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+    }
+    private static String caesarDeCode(String input, int offset){
+        return caesarCode(input, -offset);
     }
     private static String caesarCode(String input, int offset){
         StringBuilder sb = new StringBuilder(input.toUpperCase());
@@ -55,11 +59,34 @@ public class CaesarFrame extends JFrame {
         return sb.toString();
     }
 
+    class TextFocusListener implements FocusListener{
+        private boolean onFocus;
+        public TextFocusListener(boolean b){
+            onFocus = b;
+        }
+        @Override
+        public void focusGained(FocusEvent e) {
+            encoding = onFocus;
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            //do nothing
+        }
+    }
+
     class OkButtonActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+            if(encoding){
+                lowerTf.setText(caesarCode(upperTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+
+            }
+            else{
+                upperTf.setText(caesarDeCode(lowerTf.getText(), (char) selector.getSelectedItem() - 'A')); //casting here is fine
+
+            }
         }
     }
     class InputFieldKeyListener implements DocumentListener {
