@@ -1,21 +1,22 @@
-import org.w3c.dom.Text;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
+@SuppressWarnings("ConstantConditions")
 public class CaesarFrame extends JFrame {
     private final JTextField upperTf = new JTextField(20);
     private final JTextField lowerTf = new JTextField(20);
-    private final JPanel upperJp = new JPanel();
-    private final JPanel lowerJp = new JPanel();
-    private final JButton confirmButton = new JButton("Code!");
     private final JComboBox<Object> selector;
     private boolean encoding = true;
 
     public CaesarFrame(){
+        JButton confirmButton = new JButton("Code!");
+        JPanel upperJp = new JPanel();
+        JPanel lowerJp = new JPanel();
+
+
         Object[] chars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         selector = new JComboBox<>(chars);
 
@@ -60,7 +61,7 @@ public class CaesarFrame extends JFrame {
     }
 
     class TextFocusListener implements FocusListener{
-        private boolean onFocus;
+        private final boolean onFocus;
         public TextFocusListener(boolean b){
             onFocus = b;
         }
