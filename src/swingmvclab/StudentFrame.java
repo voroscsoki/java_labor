@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /*
  * A megjelenítendõ ablakunk osztálya.
@@ -30,8 +30,10 @@ public class StudentFrame extends JFrame {
      */
     private void initComponents() {
         this.setLayout(new BorderLayout());
-        
-        // ...
+        JTable table = new JTable(data);
+        table.setFillsViewportHeight(true);
+
+        this.add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
     /*
