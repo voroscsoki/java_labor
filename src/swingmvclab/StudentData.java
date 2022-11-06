@@ -54,4 +54,17 @@ public class StudentData extends AbstractTableModel {
             default -> String.class;
         };
     }
+
+    @Override
+    public boolean isCellEditable(int row, int col){
+        return col >= 2;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        switch (columnIndex){
+            case 2 -> students.get(rowIndex).setSignature((Boolean) aValue);
+            case 3 -> students.get(rowIndex).setGrade((Integer) aValue);
+        }
+    }
 }
