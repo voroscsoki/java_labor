@@ -71,5 +71,6 @@ public class StudentData extends AbstractTableModel {
             case 2 -> students.get(rowIndex).setSignature((Boolean) aValue);
             case 3 -> students.get(rowIndex).setGrade((Integer) aValue);
         }
+        fireTableDataChanged();
     }
 }

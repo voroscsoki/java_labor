@@ -1,17 +1,19 @@
 package swingmvclab;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 
 /*
  * A megjelenítendõ ablakunk osztálya.
@@ -54,6 +56,9 @@ public class StudentFrame extends JFrame {
 
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
+        table.setDefaultRenderer(String.class, new StudentTableCellRenderer(table.getDefaultRenderer(String.class)));
+        table.setDefaultRenderer(Boolean.class, new StudentTableCellRenderer(table.getDefaultRenderer(Boolean.class)));
+        table.setDefaultRenderer(Integer.class, new StudentTableCellRenderer(table.getDefaultRenderer(Integer.class)));
 
         this.add(bottomPanel, BorderLayout.SOUTH);
         this.add(new JScrollPane(table), BorderLayout.CENTER);
@@ -96,6 +101,23 @@ public class StudentFrame extends JFrame {
         // Felépítjük az ablakot
         setMinimumSize(new Dimension(500, 200));
         initComponents();
+    }
+
+    class StudentTableCellRenderer implements TableCellRenderer {
+        private TableCellRenderer renderer;
+
+        public StudentTableCellRenderer(TableCellRenderer defRenderer) {
+            this.renderer = defRenderer;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = renderer.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+            Student currentStudent = data.students.get(table.getRowSorter().convertRowIndexToModel(row));
+            component.setBackground((currentStudent.getGrade() > 1 && currentStudent.hasSignature()) ? Color.GREEN : Color.RED);
+            return component;
+        }
     }
 
     /*
