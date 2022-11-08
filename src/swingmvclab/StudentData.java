@@ -15,6 +15,11 @@ public class StudentData extends AbstractTableModel {
      */
     List<Student> students = new ArrayList<>();
 
+    public void addStudent(String name, String neptun) {
+        students.add(new Student(name, neptun, false, 0));
+        fireTableDataChanged();
+    }
+
     @Override
     public int getRowCount() {
         return students.size();
