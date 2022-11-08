@@ -53,6 +53,7 @@ public class StudentFrame extends JFrame {
         bottomPanel.add(confirmButton);
 
         table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
 
         this.add(bottomPanel, BorderLayout.SOUTH);
         this.add(new JScrollPane(table), BorderLayout.CENTER);
