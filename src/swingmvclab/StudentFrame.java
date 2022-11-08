@@ -1,19 +1,15 @@
 package swingmvclab;
 
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
 
 /*
  * A megjelenítendõ ablakunk osztálya.
@@ -27,8 +23,8 @@ public class StudentFrame extends JFrame {
      * NE MÓDOSÍTSD!
      */
     private StudentData data;
-    private JTextField nameField = new JTextField(20);
-    private JTextField neptunField = new JTextField(6);
+    private final JTextField nameField = new JTextField(20);
+    private final JTextField neptunField = new JTextField(6);
     /*
      * Itt hozzuk létre és adjuk hozzá az ablakunkhoz a különbözõ komponenseket
      * (táblázat, beviteli mezõ, gomb).
@@ -41,12 +37,7 @@ public class StudentFrame extends JFrame {
         JLabel label1 = new JLabel("Név:");
         JLabel label2 = new JLabel("Neptun:");
         JButton confirmButton = new JButton("Felvesz");
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                data.addStudent(nameField.getText(), neptunField.getText());
-            }
-        });
+        confirmButton.addActionListener(e -> data.addStudent(nameField.getText(), neptunField.getText()));
 
         bottomPanel.add(label1);
         bottomPanel.add(nameField);
@@ -104,7 +95,7 @@ public class StudentFrame extends JFrame {
     }
 
     class StudentTableCellRenderer implements TableCellRenderer {
-        private TableCellRenderer renderer;
+        private final TableCellRenderer renderer;
 
         public StudentTableCellRenderer(TableCellRenderer defRenderer) {
             this.renderer = defRenderer;
