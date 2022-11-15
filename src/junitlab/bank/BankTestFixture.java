@@ -1,18 +1,17 @@
 package junitlab.bank;
-
-import junitlab.bank.impl.FirstNationalBank;
+import junitlab.bank.impl.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class BankTestFixture {
-    private FirstNationalBank bank;
+    private GreatSavingsBank bank;
     private String acc1;
     private String acc2;
 
     @Before
     public void init() throws AccountNotExistsException {
-        bank = new FirstNationalBank();
+        bank = new GreatSavingsBank();
         acc1 = bank.openAccount();
         acc2 = bank.openAccount();
         bank.deposit(acc1, 1500);
