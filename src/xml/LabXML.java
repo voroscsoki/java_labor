@@ -12,8 +12,8 @@ public class LabXML {
         int latArg = Arrays.asList(args).indexOf("-lat") + 1;
         int lonArg = Arrays.asList(args).indexOf("-lon") + 1;
         String filename = (fileArg == 0) ? "bme.xml" : args[fileArg];
-        double latitude = (fileArg == 0) ? 47.4786346 : Double.parseDouble(args[latArg]);
-        double longitude = (fileArg == 0) ? 19.0555773 : Double.parseDouble(args[lonArg]);
+        double latitude = (latArg == 0) ? 47.4786346 : Double.parseDouble(args[latArg]);
+        double longitude = (lonArg == 0) ? 19.0555773 : Double.parseDouble(args[lonArg]);
 
         DefaultHandler h = new TagCounter(latitude, longitude);
         SAXParserFactory factory = SAXParserFactory.newInstance();
